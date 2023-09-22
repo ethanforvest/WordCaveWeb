@@ -75,10 +75,11 @@ input::placeholder {
   margin: auto;
   overflow-y: scroll;
   overflow-x: hidden;
+  font-size: 15px;
 }
 
 .player .gif {
-  width: 35%;
+  width: 30%;
   margin: 40px auto;
 }
 
