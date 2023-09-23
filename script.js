@@ -1,5 +1,6 @@
 const showButton = document.querySelector(".search-btn");
 const favDialog = document.getElementById("portal");
+const searchBox = document.getElementById('input');
 
 const API = "https://define.wrdp.app/";
 
@@ -10,6 +11,7 @@ showButton.addEventListener("click", () => {
 
 favDialog.addEventListener('close', () => {
   document.body.style.filter = 'none';
+  searchBox.focus();
 });
 
 document.addEventListener('click', (e) => {
