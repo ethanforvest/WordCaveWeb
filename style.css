@@ -50,11 +50,10 @@ input::placeholder {
   border: none;
   border-radius: 15px;
   outline: none;
-  overflow: hidden;
+  overflow: auto;
 }
 
 #portal .portal-container {
-  height: 100%;
   width: 100%;
 }
 
@@ -71,17 +70,14 @@ input::placeholder {
 .portal-container .player {
   height: 75%;
   width: 75%;
-  border: 1px solid black;
   margin: auto;
-  overflow-y: scroll;
-  overflow-x: hidden;
-  overflow: auto;
   font-size: 15px;
 }
 
 .player .gif {
   width: 30%;
   margin: 40px auto;
+  min-width: 100px;
 }
 
 .player .gif img{
@@ -89,7 +85,7 @@ input::placeholder {
   height: 100%;
 }
 
-p {
+.player p {
   display: block;
   margin: 10px 20px;
 }
