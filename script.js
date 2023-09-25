@@ -15,8 +15,11 @@ favDialog.addEventListener("close", () => {
 });
 
 function resetUI() {
-  document.querySelector(".gif img").outerHTML = `<img src="./img/loading.gif" alt="">`;
+  document.querySelector(".gif").innerHTML = "";
   document.querySelector(".header p").innerHTML = "LOADING";
+  document.querySelector(".meaning").innerHTML = "";
+  document.querySelector(".examples").innerHTML = "";
+  document.querySelectorAll(".player p").forEach(p => p.style.display = "none");
 }
 
 function assembler() {
@@ -29,10 +32,16 @@ function assembler() {
     if (this.readyState === 4) {
       if (this.status === 200) {
         const response = JSON.parse(this.responseText).Senses[0];
-
+        const definition = document.createElement('li');
+        definition.innerHTML = response.Definition;
+        const examples = document.createElement('li');
+        examples.innerHTML = response.Examples;
+        
         document.querySelector(".header p").innerHTML = userInput;
-        document.querySelector(".meaning li").innerHTML = response.Definition;
-        document.querySelector(".examples li").innerHTML = response.Examples;
+        document.querySelectorAll(".player p")
+          .forEach(p => p.style.display = "block");
+        document.querySelector(".meaning").appendChild(definition);
+        document.querySelector(".examples").appendChild(examples);
 
         const defId = response.ID;
 
@@ -42,9 +51,11 @@ function assembler() {
           })
           .then((res) => {
             const media =  res[defId];
-            document.querySelector('.gif img').outerHTML = `<img src="${media}">`;
+            const gifImg = document.createElement('img');
+            gifImg.setAttribute("src", media);
+            document.querySelector('.gif').appendChild(gifImg);
           })
-          .catch((err) => console.log("Couldn't Load the Media"));
+          .catch((err) => console.log(err, "Couldn't Load the Media"));
 
       } else {
         console.log("Something went wrong!");
