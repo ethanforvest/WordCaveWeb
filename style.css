@@ -98,8 +98,8 @@ input::placeholder {
 }
 
 .player p {
-  display: block;
   margin: 10px 20px;
+  display: none;
 }
 
 .meaning li {
