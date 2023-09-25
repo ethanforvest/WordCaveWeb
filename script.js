@@ -44,7 +44,7 @@ function assembler() {
             const media =  res[defId];
             document.querySelector('.gif img').outerHTML = `<img src="${media}">`;
           })
-          .catch((err) => window.alert("couldn't load the media"));
+          .catch((err) => console.log("Couldn't Load the Media"));
 
       } else {
         console.log("Something went wrong!");
