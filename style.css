@@ -126,4 +126,11 @@
     .recent {
         display: none;
     }
+    
+    .container {
+        grid-template-areas: 
+            "recent . saved"
+            "search-bar search-bar search-bar"
+            ". . .";
+    }
 }
