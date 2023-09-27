@@ -136,6 +136,7 @@
     border: none;
     background-color: #EFEFEF;
     width: 75%;
+    margin-left: 50px;
 }
 
 .search-bar-container input::placeholder {
@@ -169,4 +170,10 @@
             "search-bar search-bar search-bar"
             ". . .";
     }
+}
+
+@media screen and (max-width: 742px) {
+   .search-bar-container input::placeholder {
+    font-size: 18px;
+   } 
 }
