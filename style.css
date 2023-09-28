@@ -109,6 +109,10 @@
     display: none;
 }
 
+.display-expand-block {
+    display: block; 
+}
+
 .search-bar {
     display: flex;
     grid-area: search-bar;
