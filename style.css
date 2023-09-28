@@ -225,8 +225,7 @@
   height: 75%;
   width: 75%;
   margin: auto;
-  font-size: 18px;
-  font-weight: 400;
+  font-size: 15px;
 }
 
 .player .gif {
@@ -253,4 +252,11 @@
 .examples li{
   list-style: lower-roman inside;
   margin: 10px 20px;
+}
+
+.header p,
+.player p strong,
+.player .meaning li,
+.player .examples li {
+  font-family: monospace;
 }
