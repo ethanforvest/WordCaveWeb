@@ -1,40 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css" />
-    <script src="script.js" defer></script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"/>
-  </head>
-  <body>
-    <div class="container">
-      <div class="search-bar">
-        <input type="text" placeholder="Search a Word" id="input"/>
-        <button type="submite" class="search-btn">
-          <span class="material-symbols-outlined">search</span>
-        </button>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WordCaveWeb</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <script src="script.js" defer></script>
+  <link rel="shortcut icon" href="img/WordCave-logo.png" type="image/x-icon">
+</head>
+
+<body>
+  <div class="container">
+    <div class="recent">
+      <div class="recent-container">
+        <span class="recent-icon material-symbols-outlined">history</span>
+        <strong>Recent</strong>
+        <span class="expand-more-icon material-symbols-outlined">expand_more</span>
+        <div class="recent-expand"></div>
       </div>
-      <!-- Dialog Window -->
-      <dialog id="portal">
-        <div class="portal-container">
-          <div class="header">
-            <p>LOADING</p>
-          </div>
-          <div class="player">
-            <div class="gif">
-            </div>
-            <p><strong>Definitions:</strong></p>
-            <ul class="meaning">
-            </ul>
-            <p><strong>Examples:</strong></p>
-            <ul class="examples">
-            </ul>
-          </div>
-        </div>
-      </dialog>
     </div>
-  </body>
+    <div class="search-bar">
+      <div class="search-bar-container">
+        <span class="search-icon material-symbols-outlined">search</span>
+        <input type="search" placeholder="Search the unknown!" id="search-input"/>
+        <span class="material-symbols-outlined">keyboard_return</span>
+      </div>
+    </div>
+    <div class="saved">
+      <div class="saved-container">
+        <span class="saved-icon material-symbols-outlined">bookmark</span>
+        <strong>Saved</strong>
+        <span class="expand-more-icon material-symbols-outlined">expand_more</span>
+        <div class="saved-expand"></div>
+      </div>
+    </div>
+  </div>
+  <dialog id="portal">
+    <div class="portal-container">
+      <div class="header">
+        <p>LOADING</p>
+      </div>
+      <div class="player">
+        <div class="gif">
+        </div>
+        <p><strong>Definitions:</strong></p>
+        <ul class="meaning">
+        </ul>
+        <p><strong>Examples:</strong></p>
+        <ul class="examples">
+        </ul>
+      </div>
+    </div>
+  </dialog>
+</body>
+
 </html>
