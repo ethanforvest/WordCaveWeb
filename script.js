@@ -17,7 +17,7 @@ recent.addEventListener("click", () => {
 const showButton = document.querySelector(".search-bar-container");
 const favDialog = document.getElementById("portal");
 const searchBox = document.getElementById("search-input");
-const API = "https://define.wrdp.app/";
+const API = "https://wordcave.vercel.app/wordcave/word/define/";
 
 showButton.addEventListener("keypress", (e) => {
   if (e.key === "Enter") {
@@ -54,7 +54,7 @@ function assembler(e) {
     xhr.onreadystatechange = function () {
       if (this.readyState === 4) {
         if (this.status === 200) {
-          const response = JSON.parse(this.responseText).Senses[0];
+          const response = JSON.parse(this.responseText).Definition.Senses[0];
           const definition = document.createElement('li');
           definition.innerHTML = response.Definition;
           const examples = document.createElement('li');
@@ -68,17 +68,11 @@ function assembler(e) {
 
           const defId = response.ID;
 
-          fetch(`https://word-images.cdn-wordup.com/opt/${userInput}/selected.json`)
-            .then((res) => {
-              return res.json();
-            })
-            .then((res) => {
-              const media =  res[defId];
-              const gifImg = document.createElement('img');
-              gifImg.setAttribute("src", media);
-              document.querySelector('.gif').appendChild(gifImg);
-            })
-            .catch((err) => console.log(err, "Couldn't Load the Media"));
+          const media = JSON.parse(this.responseText).Media[defId];
+          const gifImg = document.createElement('img');
+
+          gifImg.setAttribute("src", media);
+          document.querySelector('.gif').appendChild(gifImg);
 
         } else {
           console.log("Something went wrong!");
