@@ -44,6 +44,26 @@ function capitalize(word) {
   return word.charAt(0).toUpperCase() + word.slice(1);
 }
 
+function isMp4(URL) {
+  return URL.includes("mp4");
+}
+
+function mp4Append(URL) {
+  const mp4Video = document.createElement("video");
+  mp4Video.setAttribute("autoplay", "");
+  mp4Video.setAttribute("muted", "");
+  mp4Video.setAttribute("loop", "");
+  const mp4Source = document.createElement("source");
+  mp4Source.setAttribute("src", URL);
+  mp4Source.setAttribute("type", "video/mp4");
+  const support = document.createTextNode("Your browser does not support video tag");
+
+  mp4Video.appendChild(mp4Source);
+  mp4Video.appendChild(support);
+  
+  document.querySelector(".gif").appendChild(mp4Video);
+}
+
 function gifAppend(URL) {
   const gifImg = document.createElement("img");
   gifImg.setAttribute("data-src", URL);
@@ -85,13 +105,13 @@ function assembler(e) {
           } else if (!media.includes("https")) {
             if (media.includes("opt")) {
               const mediaBase = `https://word-images.cdn-wordup.com/${media}`;
-              gifAppend(mediaBase);
+              isMp4(mediaBase) ? mp4Append(mediaBase) : gifAppend(mediaBase);
             } else {
               const mediaBase = `https://word-images.cdn-wordup.com/opt/${media}`;
-              gifAppend(mediaBase);
+              isMp4(mediaBase) ? mp4Append(mediaBase) : gifAppend(mediaBase);
             }
           } else {
-            gifAppend(media);
+            isMp4(media) ? mp4Append(media) : gifAppend(media);
          }
 
         } else {
