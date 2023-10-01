@@ -243,9 +243,15 @@
 }
 
 .player .gif {
-  width: 30%;
+  width: 50%;
   margin: 40px auto;
   min-width: 100px;
+}
+
+@media screen and (max-width: 770px) {
+  .player .gif {
+    width: 80%;
+  }
 }
 
 .player .gif img {
