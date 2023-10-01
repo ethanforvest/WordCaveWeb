@@ -44,6 +44,12 @@ function capitalize(word) {
   return word.charAt(0).toUpperCase() + word.slice(1);
 }
 
+function gifAppend(URL) {
+  const gifImg = document.createElement("img");
+  gifImg.setAttribute("src", URL);
+  document.querySelector(".gif").appendChild(gifImg);
+}
+
 function assembler(e) {
   if (e.key === "Enter") {
     const userInput = searchBox.value.trim();
@@ -67,12 +73,21 @@ function assembler(e) {
           document.querySelector(".examples").appendChild(examples);
 
           const defId = response.ID;
-
           const media = JSON.parse(this.responseText).Media[defId];
-          const gifImg = document.createElement('img');
 
-          gifImg.setAttribute("src", media);
-          document.querySelector('.gif').appendChild(gifImg);
+          if (media === undefined) {
+            console.log("Media not found!")
+          } else if (!media.includes("https")) {
+            if (media.includes("opt")) {
+              const mediaBase = `https://word-images.cdn-wordup.com/${media}`
+              gifAppend(mediaBase);
+            } else {
+              const mediaBase = `https://word-images.cdn-wordup.com/opt/${media}`
+              gifAppend(mediaBase);
+            }
+          } else {
+            gifAppend(media);
+         }
 
         } else {
           console.log("Something went wrong!");
