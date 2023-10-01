@@ -274,3 +274,7 @@
 .player .examples li {
   font-family: monospace;
 }
+
+.header p:hover {
+  cursor: pointer;
+}
