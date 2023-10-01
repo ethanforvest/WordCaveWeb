@@ -155,6 +155,12 @@
     left: 30px;
 }
 
+.search-bar .search-bar-container .return-icon {
+  position: absolute;
+  right: 24px;
+  bottom: 10px;
+}
+
 @media screen and (max-width: 880px){
     .recent .recent-container .recent-icon, 
     .saved .saved-container .saved-icon {
@@ -162,7 +168,7 @@
     }
 }
 
-@media screen and (max-width: 699px) {
+@media screen and (max-width: 1000px) {
     .saved,
     .recent {
         display: none;
@@ -174,12 +180,6 @@
             "search-bar search-bar search-bar"
             ". . .";
     }
-}
-
-@media screen and (max-width: 742px) {
-   .search-bar-container input::placeholder {
-    font-size: 18px;
-   } 
 }
 
 /* Poratal */
