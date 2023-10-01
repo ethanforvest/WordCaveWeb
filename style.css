@@ -157,8 +157,19 @@
 
 .search-bar .search-bar-container .return-icon {
   position: absolute;
-  right: 24px;
-  bottom: 10px;
+  right: 20px;
+}
+
+#search-input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  height: 20px;
+  width: 20px;
+  background-image: url("./img/close.svg");
+  background-size: contain;
+}
+
+#search-input::-webkit-search-cancel-button:hover {
+  cursor: pointer;
 }
 
 @media screen and (max-width: 880px){
@@ -213,6 +224,8 @@
 
 #portal .portal-container .header p {
   font-size: 25px;
+  text-align: center;
+  margin: 0 50px;
 }
 
 #portal .portal-container .header {
