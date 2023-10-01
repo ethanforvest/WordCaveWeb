@@ -148,11 +148,17 @@
     font-weight: 500;
     font-size: 20px;
     text-align: center;
+    user-select: none;
 }
 
 .search-bar-container .search-icon {
     position: absolute;
     left: 30px;
+    user-select: none;
+}
+
+.search-bar-container .return-icon {
+  user-select: none;
 }
 
 #search-input::-webkit-search-cancel-button {
