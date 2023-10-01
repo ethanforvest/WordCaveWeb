@@ -155,11 +155,6 @@
     left: 30px;
 }
 
-.search-bar .search-bar-container .return-icon {
-  position: absolute;
-  right: 30px;
-}
-
 #search-input::-webkit-search-cancel-button {
   -webkit-appearance: none;
   height: 20px;
