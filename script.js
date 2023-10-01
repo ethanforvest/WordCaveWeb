@@ -34,7 +34,7 @@ favDialog.addEventListener("close", () => {
 
 function resetUI() {
   document.querySelector("#portal .gif").innerHTML = "";
-  document.querySelector("#portal .header p").innerHTML = "LOADING";
+  document.querySelector("#portal .header p").innerHTML = `<img data-src="./img/Spinner.svg" class="lazyload">`;
   document.querySelector("#portal .meaning").innerHTML = "";
   document.querySelector("#portal .examples").innerHTML = "";
   document.querySelectorAll("#portal .player p").forEach(p => p.style.display = "none");
@@ -53,7 +53,7 @@ function gifAppend(URL) {
 
 function assembler(e) {
   if (e.key === "Enter") {
-    const userInput = searchBox.value.trim();
+    const userInput = searchBox.value.trim().toLowerCase();
     const searchQuery = API + userInput;
     const xhr = new XMLHttpRequest();
 
@@ -61,6 +61,10 @@ function assembler(e) {
     xhr.onreadystatechange = function () {
       if (this.readyState === 4) {
         if (this.status === 200) {
+          if (JSON.parse(this.responseText) === "Word not Found or Something went wrong!") {
+            document.querySelector("#portal .header p").innerHTML = "We could not find the word in our servers!";
+            return;
+          }
           const response = JSON.parse(this.responseText).Definition.Senses[0];
           const definition = document.createElement('li');
           definition.innerHTML = response.Definition;
@@ -77,13 +81,13 @@ function assembler(e) {
           const media = JSON.parse(this.responseText).Media[defId];
 
           if (media === undefined) {
-            console.log("Media not found!")
+            console.log("Media not found!");
           } else if (!media.includes("https")) {
             if (media.includes("opt")) {
-              const mediaBase = `https://word-images.cdn-wordup.com/${media}`
+              const mediaBase = `https://word-images.cdn-wordup.com/${media}`;
               gifAppend(mediaBase);
             } else {
-              const mediaBase = `https://word-images.cdn-wordup.com/opt/${media}`
+              const mediaBase = `https://word-images.cdn-wordup.com/opt/${media}`;
               gifAppend(mediaBase);
             }
           } else {
@@ -97,6 +101,10 @@ function assembler(e) {
     };
 
     xhr.send();
+    
+    xhr.onerror = () => {
+      document.querySelector("#portal .header p").innerHTML = "Try Again!";
+    };
 
     favDialog.addEventListener("close", () => xhr.abort());
   }
