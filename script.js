@@ -46,7 +46,8 @@ function capitalize(word) {
 
 function gifAppend(URL) {
   const gifImg = document.createElement("img");
-  gifImg.setAttribute("src", URL);
+  gifImg.setAttribute("data-src", URL);
+  gifImg.classList.add("lazyload");
   document.querySelector(".gif").appendChild(gifImg);
 }
 
