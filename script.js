@@ -107,7 +107,7 @@ function addRecent(word) {
   if (!orderedList) {
     const newOrderedList = document.createElement("ol")
     newOrderedList.prepend(recentWord);
-    
+
     document.querySelector(".recent-container .recent-expand")
       .appendChild(newOrderedList);
   } else {
@@ -140,7 +140,7 @@ function gifAppend(URL) {
 
 function assembler(e) {
   if (e.key === "Enter") {
-    const userInput = capitalize(searchBox.value.trim().toLowerCase());
+    let userInput = searchBox.value.trim().toLowerCase();
     const searchQuery = API + userInput;
     const xhr = new XMLHttpRequest();
 
@@ -152,6 +152,7 @@ function assembler(e) {
             document.querySelector("#portal .header p").innerHTML = "We could not find the word in our servers!";
             return;
           }
+          userInput = capitalize(userInput);
           addRecent(userInput);
           const response = JSON.parse(this.responseText).Definition.Senses[0];
           const definition = document.createElement('li');
