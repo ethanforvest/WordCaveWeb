@@ -48,6 +48,73 @@ function isMp4(URL) {
   return URL.includes("mp4");
 }
 
+function getDate() {
+  let date = new Date();
+  let month = date.getMonth();
+
+  switch (month) {
+    case 0:
+      month = "Jan";
+      break;
+    case 1:
+      month = "Feb";
+      break;
+    case 2:
+      month = "March";
+      break;
+    case 3:
+      month = "April";
+      break;
+    case 4:
+      month = "May";
+      break;
+    case 5:
+      month = "June";
+      break;
+    case 6:
+      month = "July";
+      break;
+    case 7:
+      month = "Aug";
+      break;
+    case 8:
+      month = "Sep";
+      break;
+    case 9:
+      month = "Oct";
+      break;
+    case 10:
+      month = "Nov";
+      break;
+    case 11:
+      month = "Dec";
+      break;
+  }
+    
+  return `${month}, ${date.getDate()}`;
+}
+
+function addRecent(word) {
+  const FormartedDate = getDate();
+  const orderedList = document.querySelector(".recent-expand ol")
+  const recentWord = document.createElement("li");
+  recentWord.innerHTML = `${word}`;
+  const dateHolder = document.createElement("p");
+  dateHolder.innerHTML = FormartedDate;
+
+  recentWord.appendChild(dateHolder);
+
+  if (!orderedList) {
+    const newOrderedList = document.createElement("ol")
+    newOrderedList.prepend(recentWord);
+    
+    document.querySelector(".recent-container .recent-expand")
+      .appendChild(newOrderedList);
+  } else {
+    orderedList.prepend(recentWord);
+  }
+}
+
 function mp4Append(URL) {
   const mp4Video = document.createElement("video");
   mp4Video.setAttribute("autoplay", "");
@@ -73,7 +140,7 @@ function gifAppend(URL) {
 
 function assembler(e) {
   if (e.key === "Enter") {
-    const userInput = searchBox.value.trim().toLowerCase();
+    const userInput = capitalize(searchBox.value.trim().toLowerCase());
     const searchQuery = API + userInput;
     const xhr = new XMLHttpRequest();
 
@@ -85,13 +152,14 @@ function assembler(e) {
             document.querySelector("#portal .header p").innerHTML = "We could not find the word in our servers!";
             return;
           }
+          addRecent(userInput);
           const response = JSON.parse(this.responseText).Definition.Senses[0];
           const definition = document.createElement('li');
           definition.innerHTML = response.Definition;
           const examples = document.createElement('li');
           examples.innerHTML = response.Examples;
           
-          document.querySelector(".header p").innerHTML = capitalize(userInput);
+          document.querySelector(".header p").innerHTML = userInput;
           document.querySelectorAll(".player p")
             .forEach(p => p.style.display = "block");
           document.querySelector(".meaning").appendChild(definition);
