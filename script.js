@@ -48,8 +48,11 @@ function isMp4(URL) {
   return URL.includes("mp4");
 }
 
-function getDate() {
+function getDate(time = null) {
   let date = new Date();
+
+  if (time) date = new Date(time);
+
   let month = date.getMonth();
 
   switch (month) {
@@ -94,8 +97,33 @@ function getDate() {
   return `${month}, ${date.getDate()}`;
 }
 
-function addRecent(word) {
-  const FormartedDate = getDate();
+function getTime() {
+  return new Date().getTime();
+}
+
+function addRecentLocal(word) {
+  const time = getTime();
+  if (!localStorage.getItem("Recent")) {
+    let items = [{Word: word, Time: time}];
+    items = JSON.stringify(items);
+    localStorage.setItem("Recent", items);
+  } else {
+    let recentLocalData = localStorage.getItem("Recent");
+    recentLocalData = JSON.parse(recentLocalData);
+    recentLocalData.push({Word: word, Time: time});
+    recentLocalData = JSON.stringify(recentLocalData);
+    localStorage.setItem("Recent", recentLocalData);
+  }
+}
+
+function addRecent(word, time = null) {
+  let FormartedDate;
+  if (time) {
+    FormartedDate = time;
+  } else {
+    FormartedDate = getDate();
+    addRecentLocal(word);
+  }
   const orderedList = document.querySelector(".recent-expand ol")
   const recentWord = document.createElement("li");
   recentWord.innerHTML = `${word}`;
@@ -209,3 +237,14 @@ document.addEventListener("click", (e) => {
     }
   }
 });
+
+function displayRecent() {
+  let recentItems = localStorage.getItem("Recent");
+  if (!recentItems) return;
+  recentItems = JSON.parse(recentItems);
+  recentItems.forEach(item => {
+    addRecent(item.Word, getDate(item.Time));
+  })
+}
+
+document.addEventListener("DOMContentLoaded", displayRecent);
