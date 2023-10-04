@@ -146,7 +146,7 @@ function addRecent(word, time = null) {
 function mp4Append(URL) {
   const mp4Video = document.createElement("video");
   mp4Video.setAttribute("autoplay", "");
-  mp4Video.setAttribute("muted", "");
+  mp4Video.setAttribute("oncanplay", "this.muted = true");
   mp4Video.setAttribute("loop", "");
   const mp4Source = document.createElement("source");
   mp4Source.setAttribute("src", URL);
