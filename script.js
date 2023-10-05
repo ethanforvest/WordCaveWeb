@@ -21,17 +21,18 @@ const API = "https://wordcave.vercel.app/wordcave/word/define/";
 
 showButton.addEventListener("keypress", (e) => {
   if (e.key === "Enter") {
-    favDialog.showModal();
-    document.body.style.filter = "blur(7px)";
+    openPortal();
   }
 });
 
+// Listens to see if the portal is closed
 favDialog.addEventListener("close", () => {
   document.body.style.filter = "none";
   searchBox.focus();
   resetUI();
 });
 
+// Cleans up the portal
 function resetUI() {
   document.querySelector("#portal .gif").innerHTML = "";
   document.querySelector("#portal .header p").innerHTML = `<img data-src="./img/Spinner.svg" class="lazyload">`;
@@ -97,10 +98,12 @@ function getDate(time = null) {
   return `${month}, ${date.getDate()}`;
 }
 
+// Gives the current time in milliseconds 
 function getTime() {
   return new Date().getTime();
 }
 
+// Adds new words to local storage
 function addRecentLocal(word) {
   const time = getTime();
   if (!localStorage.getItem("Recent")) {
@@ -116,24 +119,33 @@ function addRecentLocal(word) {
   }
 }
 
+// Adds new words to the DOM
 function addRecent(word, time = null) {
   let FormartedDate;
+
   if (time) {
     FormartedDate = time;
   } else {
     FormartedDate = getDate();
+    // Adds the new word to local storage
     addRecentLocal(word);
   }
+  
   const orderedList = document.querySelector(".recent-expand ol")
   const recentWord = document.createElement("li");
+
+  // Adds an event listener to the new item only if it is created by invoking the search bar
+  if (!time) getNewItemReady(recentWord);
+
   recentWord.innerHTML = `${word}`;
   const dateHolder = document.createElement("p");
   dateHolder.innerHTML = FormartedDate;
 
   recentWord.appendChild(dateHolder);
 
+  // Checks to see if there is an `ol`
   if (!orderedList) {
-    const newOrderedList = document.createElement("ol")
+    const newOrderedList = document.createElement("ol");
     newOrderedList.prepend(recentWord);
 
     document.querySelector(".recent-container .recent-expand")
@@ -148,9 +160,11 @@ function mp4Append(URL) {
   mp4Video.setAttribute("autoplay", "");
   mp4Video.setAttribute("oncanplay", "this.muted = true");
   mp4Video.setAttribute("loop", "");
+
   const mp4Source = document.createElement("source");
   mp4Source.setAttribute("src", URL);
   mp4Source.setAttribute("type", "video/mp4");
+
   const support = document.createTextNode("Your browser does not support video tag");
 
   mp4Video.appendChild(mp4Source);
@@ -166,9 +180,16 @@ function gifAppend(URL) {
   document.querySelector(".gif").appendChild(gifImg);
 }
 
-function assembler(e) {
-  if (e.key === "Enter") {
+function assembler(e, showWord = undefined) {
+  // If the e === `internal`, `assembler` is invoked by manually, not by the search bar
+  if (e.key === "Enter" || e === "internal") {
     let userInput = searchBox.value.trim().toLowerCase();
+
+    // Checks to see if the current process is invoked by the search bar
+    // showWord only `!` when the current process is invoked by the search bar
+    // otherwise we pass a desired word to process along with it when we call the `assembler` manually
+    if (showWord) userInput = showWord.toLowerCase();
+
     const searchQuery = API + userInput;
     const xhr = new XMLHttpRequest();
 
@@ -181,7 +202,10 @@ function assembler(e) {
             return;
           }
           userInput = capitalize(userInput);
-          addRecent(userInput);
+          
+          // Calls addRecent only if the current process invoked by the search bar
+          if (!showWord) addRecent(userInput);
+          
           const response = JSON.parse(this.responseText).Definition.Senses[0];
           const definition = document.createElement('li');
           definition.innerHTML = response.Definition;
@@ -195,6 +219,8 @@ function assembler(e) {
           document.querySelector(".examples").appendChild(examples);
 
           const defId = response.ID;
+
+          // Returns `undefined` if the correct media not found
           const media = JSON.parse(this.responseText).Media[defId];
 
           if (media === undefined) {
@@ -223,12 +249,14 @@ function assembler(e) {
       document.querySelector("#portal .header p").innerHTML = "Try Again!";
     };
 
+    // Aborts the xhr request if the user closes the portal 
     favDialog.addEventListener("close", () => xhr.abort());
   }
 }
 
 showButton.addEventListener("keypress", assembler);
 
+// Closes the portal when the user clicks the header `p`
 document.addEventListener("click", (e) => {
   const word = document.querySelector(".header p");
   if (favDialog.open) {
@@ -238,6 +266,7 @@ document.addEventListener("click", (e) => {
   }
 });
 
+// Gets the recent words from local storage and add them to recent window
 function displayRecent() {
   let recentItems = localStorage.getItem("Recent");
   if (!recentItems) return;
@@ -245,6 +274,49 @@ function displayRecent() {
   recentItems.forEach(item => {
     addRecent(item.Word, getDate(item.Time));
   })
+
+  // Adds event listeners to those items 
+  const recentWordsList = document.querySelectorAll(".recent-container .recent-expand ol li");
+  getItemsReady(recentWordsList);
 }
 
 document.addEventListener("DOMContentLoaded", displayRecent);
+
+// Adds event listeners to recent & saved items 
+function getItemsReady(itemLists) {
+  itemLists.forEach(item => {
+    item.addEventListener("click", e => {
+      if (e.target === item) {
+        const word = e.target.innerText.split("\n")[0];
+        invokeAssembler(word);
+      } else if (e.target.parentElement === item) {
+        const word = e.target.parentElement.innerText.split("\n")[0];
+        invokeAssembler(word);
+      }
+    });
+  });
+}
+
+// Adds an event listener to a newly created item, those words that freshly added to DOM
+function getNewItemReady(item) {
+    item.addEventListener("click", e => {
+      if (e.target === item) {
+        const word = e.target.innerText.split("\n")[0];
+        invokeAssembler(word);
+      } else if (e.target.parentElement === item) {
+        const word = e.target.parentElement.innerText.split("\n")[0];
+        invokeAssembler(word);
+      }
+    });
+}
+
+function invokeAssembler(word) {
+  const MESSAGE = "internal"
+  assembler(MESSAGE, word);
+  openPortal();
+}
+
+function openPortal() {
+  favDialog.showModal();
+  document.body.style.filter = "blur(7px)";
+}
