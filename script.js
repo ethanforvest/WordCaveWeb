@@ -4,16 +4,19 @@ const savedExpand = document.querySelector(".saved-expand");
 const recent = document.querySelector(".recent .recent-container");
 const recentExpand = document.querySelector(".recent-expand");
 
-saved.addEventListener("click", () => {
+saved.addEventListener("click", (e) => {
+  if (e.target === saved || e.target.parentElement === saved) {
     savedExpand.classList.toggle("display-expand-block");
+  } 
 });
 
-recent.addEventListener("click", () => {
+recent.addEventListener("click", (e) => {
+  if (e.target === recent || e.target.parentElement === recent) {
     recentExpand.classList.toggle("display-expand-block");
+  } 
 });
 
 // Portal
-
 const showButton = document.querySelector(".search-bar-container");
 const favDialog = document.getElementById("portal");
 const searchBox = document.getElementById("search-input");
