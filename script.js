@@ -35,7 +35,16 @@ favDialog.addEventListener("close", () => {
 // Cleans up the portal
 function resetUI() {
   document.querySelector("#portal .gif").innerHTML = "";
-  document.querySelector("#portal .header p").innerHTML = `<img data-src="./img/Spinner.svg" class="lazyload">`;
+
+  const spinner = document.createElement("img");
+  spinner.setAttribute("data-src", "./img/Spinner.svg");
+  spinner.setAttribute("draggable", "false");
+  spinner.className = "lazyload";
+  spinner.id = "spinner"
+  const header = document.querySelector("#portal .header p");
+  header.innerHTML = "";
+  header.appendChild(spinner);
+
   document.querySelector("#portal .meaning").innerHTML = "";
   document.querySelector("#portal .examples").innerHTML = "";
   document.querySelectorAll("#portal .player p").forEach(p => p.style.display = "none");

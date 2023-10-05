@@ -316,3 +316,7 @@
 .header p:hover {
   cursor: pointer;
 }
+
+#spinner {
+  user-select: none;
+}
