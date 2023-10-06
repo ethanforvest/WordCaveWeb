@@ -51,6 +51,11 @@ function resetUI() {
   document.querySelector("#portal .meaning").innerHTML = "";
   document.querySelector("#portal .examples").innerHTML = "";
   document.querySelectorAll("#portal .player p").forEach(p => p.style.display = "none");
+
+  document.querySelector("#portal .controls").style.display = "none";
+
+  // Portal controls
+  document.querySelector("#portal .controls .pages").innerHTML = "";
 }
 
 function capitalize(word) {
@@ -192,6 +197,7 @@ function gifAppend(URL) {
   document.querySelector(".gif").appendChild(gifImg);
 }
 
+let xhrResponseText;
 function assembler(e, showWord = undefined) {
   // If the e === `internal`, `assembler` is invoked by manually, not by the search bar
   if (e.key === "Enter" || e === "internal") {
@@ -218,6 +224,13 @@ function assembler(e, showWord = undefined) {
           // Calls addRecent only if the current process invoked by the search bar
           if (!showWord) addRecent(userInput);
           
+          // Sends how many definitions are there
+          addPages(JSON.parse(this.responseText).Definition.Senses.length);
+
+          // Adds event listeners to pages and intialize some variables
+          checkPages();
+          xhrResponseText = [this.responseText, userInput];
+
           const response = JSON.parse(this.responseText).Definition.Senses[0];
           const definition = document.createElement('li');
           definition.innerHTML = response.Definition;
@@ -229,6 +242,9 @@ function assembler(e, showWord = undefined) {
             .forEach(p => p.style.display = "block");
           document.querySelector(".meaning").appendChild(definition);
           document.querySelector(".examples").appendChild(examples);
+
+          // Shows the controls
+          document.querySelector("#portal .controls").style.display = "flex";
 
           const defId = response.ID;
 
@@ -323,7 +339,7 @@ function getNewItemReady(item) {
 }
 
 function invokeAssembler(word) {
-  const MESSAGE = "internal"
+  const MESSAGE = "internal";
   assembler(MESSAGE, word);
   openPortal();
 }
@@ -331,4 +347,124 @@ function invokeAssembler(word) {
 function openPortal() {
   favDialog.showModal();
   document.body.style.filter = "blur(7px)";
+}
+
+// Portal's controls
+const nextBtn = document.querySelector("#portal .controls #next");
+const beforeBtn = document.querySelector("#portal .controls #before");
+
+let circles;
+let itemLeng;
+function checkPages() {
+  circles = document.querySelectorAll("#portal .controls .pages li");
+  itemLeng = circles.length - 1;
+
+  circles.forEach((item, key) => {
+    // If the users clicks a specifc item
+    item.addEventListener("click", () => {
+      pageScaler(key);
+      resetNewPageUI();
+      updatePortal(num);
+    });
+  });
+  circles.item(0).className = "scaler";
+}
+
+function resetNewPageUI() {
+  document.querySelector("#portal .gif").innerHTML = "";
+  document.querySelector("#portal .meaning").innerHTML = "";
+  document.querySelector("#portal .examples").innerHTML = "";
+  document.querySelectorAll("#portal .player p")
+    .forEach((p) => (p.style.display = "none"));
+}
+
+// Stores the current page index
+let num = 0;
+
+nextBtn.addEventListener("click", () => {
+  if (itemLeng === num) {
+    console.log("Maximum `next` limit");
+  } else {
+    num = num + 1;
+    const nextItem = circles.item(num);
+    resetPages();
+    nextItem.classList.add("scaler");
+    resetNewPageUI();
+    updatePortal(num);
+  }
+});
+
+beforeBtn.addEventListener("click", () => {
+  if (num === 0) {
+    console.log("maximum `before` limit");
+  } else {
+    num = num - 1;
+    const nextItem = circles.item(num);
+    resetPages();
+    nextItem.classList.add("scaler");
+    resetNewPageUI();
+    updatePortal(num);
+  }
+})
+
+function resetPages() {
+  circles.forEach(page => {
+    page.classList.remove("scaler");
+  });
+}
+
+function pageScaler(listIndex) {
+  const nextItem = circles.item(listIndex);
+  resetPages();
+  num = listIndex;
+  nextItem.classList.add("scaler");
+}
+
+// Updates the portal
+function updatePortal(pageIndex) {
+  const [responseText, userInput] = xhrResponseText;
+  const response = JSON.parse(responseText).Definition.Senses[pageIndex];
+  const definition = document.createElement("li");
+  definition.innerHTML = response.Definition;
+  const examples = document.createElement("li");
+  examples.innerHTML = response.Examples;
+
+  document.querySelector(".header p").innerHTML = userInput;
+  document
+    .querySelectorAll(".player p")
+    .forEach((p) => (p.style.display = "block"));
+  document.querySelector(".meaning").appendChild(definition);
+  document.querySelector(".examples").appendChild(examples);
+
+  // Shows the controls
+  document.querySelector("#portal .controls").style.display = "flex";
+
+  const defId = response.ID;
+
+  // Returns `undefined` if the correct media not found
+  const media = JSON.parse(responseText).Media[defId];
+
+  if (media === undefined) {
+    console.log("Media not found!");
+  } else if (!media.includes("https")) {
+    if (media.includes("opt")) {
+      const mediaBase = `https://word-images.cdn-wordup.com/${media}`;
+      isMp4(mediaBase) ? mp4Append(mediaBase) : gifAppend(mediaBase);
+    } else {
+      const mediaBase = `https://word-images.cdn-wordup.com/opt/${media}`;
+      isMp4(mediaBase) ? mp4Append(mediaBase) : gifAppend(mediaBase);
+    }
+  } else {
+    isMp4(media) ? mp4Append(media) : gifAppend(media);
+  }
+}
+
+function addPages(howMany) {
+  // We don't want to start the count with `0`
+  const howManyItems = howMany - 1;
+  const pageContainer = document.querySelector("#portal .controls .pages");
+  for (let index = 0; index <= howManyItems; index++) {
+    const newItem = document.createElement("li");
+    pageContainer.appendChild(newItem);
+  }
 }
