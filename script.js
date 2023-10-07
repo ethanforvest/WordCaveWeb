@@ -56,6 +56,7 @@ function resetUI() {
 
   // Portal controls
   document.querySelector("#portal .controls .pages").innerHTML = "";
+  currentPageIndex = 0;
 }
 
 function capitalize(word) {
@@ -364,7 +365,7 @@ function checkPages() {
     item.addEventListener("click", () => {
       pageScaler(key);
       resetNewPageUI();
-      updatePortal(num);
+      updatePortal(currentPageIndex);
     });
   });
   circles.item(0).className = "scaler";
@@ -379,31 +380,31 @@ function resetNewPageUI() {
 }
 
 // Stores the current page index
-let num = 0;
+let currentPageIndex = 0;
 
 nextBtn.addEventListener("click", () => {
-  if (itemLeng === num) {
+  if (itemLeng === currentPageIndex) {
     console.log("Maximum `next` limit");
   } else {
-    num = num + 1;
-    const nextItem = circles.item(num);
+    currentPageIndex = currentPageIndex + 1;
+    const nextItem = circles.item(currentPageIndex);
     resetPages();
     nextItem.classList.add("scaler");
     resetNewPageUI();
-    updatePortal(num);
+    updatePortal(currentPageIndex);
   }
 });
 
 beforeBtn.addEventListener("click", () => {
-  if (num === 0) {
+  if (currentPageIndex === 0) {
     console.log("maximum `before` limit");
   } else {
-    num = num - 1;
-    const nextItem = circles.item(num);
+    currentPageIndex = currentPageIndex - 1;
+    const nextItem = circles.item(currentPageIndex);
     resetPages();
     nextItem.classList.add("scaler");
     resetNewPageUI();
-    updatePortal(num);
+    updatePortal(currentPageIndex);
   }
 })
 
@@ -416,7 +417,7 @@ function resetPages() {
 function pageScaler(listIndex) {
   const nextItem = circles.item(listIndex);
   resetPages();
-  num = listIndex;
+  currentPageIndex = listIndex;
   nextItem.classList.add("scaler");
 }
 
