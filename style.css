@@ -207,17 +207,18 @@
 }
 
 @media screen and (max-width: 1000px) {
-    .saved,
-    .recent {
-        display: none;
-    }
-    
-    .container {
-        grid-template-areas: 
-            "recent . saved"
-            "search-bar search-bar search-bar"
-            ". . .";
-    }
+  .saved,
+  .recent {
+    align-items: flex-start;
+  }
+
+  .container {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1.5fr;
+    grid-template-areas:
+      "search-bar search-bar"
+      "recent saved";
+  }
 }
 
 /* Poratal */
