@@ -228,7 +228,7 @@ function assembler(e, showWord = undefined) {
           // Sends how many definitions are there
           addPages(JSON.parse(this.responseText).Definition.Senses.length);
 
-          // Adds event listeners to pages and intialize some variables
+          // Adds event listeners to pages and initialize some variables
           checkPages();
           xhrResponseText = [this.responseText, userInput];
 
@@ -249,7 +249,7 @@ function assembler(e, showWord = undefined) {
 
           const defId = response.ID;
 
-          // Returns `undefined` if the correct media not found
+          // Returns `undefined` if the correct media is not found
           const media = JSON.parse(this.responseText).Media[defId];
 
           if (media === undefined) {
@@ -326,7 +326,7 @@ function getItemsReady(itemLists) {
   });
 }
 
-// Adds an event listener to a newly created item, those words that freshly added to DOM
+// Adds an event listener to a newly created item, those words that are freshly added to DOM
 function getNewItemReady(item) {
     item.addEventListener("click", e => {
       if (e.target === item) {
@@ -361,7 +361,7 @@ function checkPages() {
   itemLeng = circles.length - 1;
 
   circles.forEach((item, key) => {
-    // If the users clicks a specifc item
+    // If the user clicks a specific item
     item.addEventListener("click", () => {
       pageScaler(key);
       resetNewPageUI();
@@ -442,7 +442,7 @@ function updatePortal(pageIndex) {
 
   const defId = response.ID;
 
-  // Returns `undefined` if the correct media not found
+  // Returns `undefined` if the correct media is not found
   const media = JSON.parse(responseText).Media[defId];
 
   if (media === undefined) {
