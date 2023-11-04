@@ -131,10 +131,6 @@
   list-style: none;
 }
 
-.expand-more li:hover p {
-  display: block;
-}
-
 .display-expand-block {
     display: block; 
 }
@@ -199,6 +195,12 @@
   cursor: pointer;
 }
 
+@media screen and (max-width: 600px){
+  .expand-more ol li p{
+    display: none;
+  }
+}
+
 @media screen and (max-width: 880px){
     .recent .recent-container .recent-icon, 
     .saved .saved-container .saved-icon {
@@ -218,6 +220,10 @@
     grid-template-areas:
       "search-bar search-bar"
       "recent saved";
+  }
+
+  .expand-more {
+    max-height: 48vh;
   }
 }
 
