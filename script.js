@@ -4,6 +4,8 @@ const savedExpand = document.querySelector(".saved-expand");
 const recent = document.querySelector(".recent .recent-container");
 const recentExpand = document.querySelector(".recent-expand");
 
+let isPortalLoaded = false;
+
 saved.addEventListener("click", (e) => {
   if (e.target === saved || e.target.parentElement === saved) {
     savedExpand.classList.toggle("display-expand-block");
@@ -57,6 +59,8 @@ function resetUI() {
   // Portal controls
   document.querySelector("#portal .controls .pages").innerHTML = "";
   currentPageIndex = 0;
+
+  isPortalLoaded = false;
 }
 
 function capitalize(word) {
@@ -246,6 +250,7 @@ function assembler(e, showWord = undefined) {
 
           // Shows the controls
           document.querySelector("#portal .controls").style.display = "flex";
+          isPortalLoaded = true;
 
           const defId = response.ID;
 
@@ -407,6 +412,17 @@ beforeBtn.addEventListener("click", () => {
     updatePortal(currentPageIndex);
   }
 })
+
+// Portal Shortcuts
+document.addEventListener("keydown", e => {
+  if (favDialog.open && isPortalLoaded) {
+    if (e.key === "ArrowRight") {
+      nextBtn.dispatchEvent(new Event("click"));
+    } else if (e.key === "ArrowLeft") {
+      beforeBtn.dispatchEvent(new Event("click"));
+    }
+  }
+});
 
 function resetPages() {
   circles.forEach(page => {
