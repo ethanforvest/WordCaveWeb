@@ -6,13 +6,13 @@ const recentExpand = document.querySelector(".recent-expand");
 
 let isPortalLoaded = false;
 
-saved.addEventListener("click", (e) => {
+saved.addEventListener("click", e => {
   if (e.target === saved || e.target.parentElement === saved) {
     savedExpand.classList.toggle("display-expand-block");
   } 
 });
 
-recent.addEventListener("click", (e) => {
+recent.addEventListener("click", e => {
   if (e.target === recent || e.target.parentElement === recent) {
     recentExpand.classList.toggle("display-expand-block");
   } 
@@ -24,7 +24,7 @@ const favDialog = document.getElementById("portal");
 const searchBox = document.getElementById("search-input");
 const API = "https://wordcave.vercel.app/wordcave/word/define/";
 
-showButton.addEventListener("keypress", (e) => {
+showButton.addEventListener("keypress", e => {
   if (e.key === "Enter") {
     openPortal();
   }
