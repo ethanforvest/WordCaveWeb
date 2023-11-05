@@ -87,6 +87,11 @@
     right: 30px;
 }
 
+.rotate-icon {
+  transform: rotate(-180deg);
+  transition: all 0.5s;
+}
+
 .expand-more {
     position: absolute;
     height: 70vh;

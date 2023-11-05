@@ -9,12 +9,14 @@ let isPortalLoaded = false;
 saved.addEventListener("click", e => {
   if (e.target === saved || e.target.parentElement === saved) {
     savedExpand.classList.toggle("display-expand-block");
+    document.querySelector(".saved-container .expand-more-icon").classList.toggle("rotate-icon");
   } 
 });
 
 recent.addEventListener("click", e => {
   if (e.target === recent || e.target.parentElement === recent) {
     recentExpand.classList.toggle("display-expand-block");
+    document.querySelector(".recent-container .expand-more-icon").classList.toggle("rotate-icon");
   } 
 });
 
