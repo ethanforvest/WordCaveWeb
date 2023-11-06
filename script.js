@@ -358,7 +358,6 @@ function isSaved(word, bool=false) {
     return indexOfItem === -1 ? false : true;
   } else {
     if (!localSavedItems) return null;
-    // return localSavedItems.find(item => item.Word === word);
     return localSavedItems.findIndex(item => item.Word === word);
   }
 }
