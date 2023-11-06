@@ -147,7 +147,6 @@ function addRecentLocal(word) {
 function addSavedLocal() {
   const time = getTime();
   const word = document.querySelector(".header p").textContent.split(" ")[0];
-  console.log(word);
   if (!localStorage.getItem("Saved")) {
     let items = [{Word: word, Time: time}];
     items = JSON.stringify(items);
@@ -383,11 +382,6 @@ document.addEventListener("click", (e) => {
     } else if (e.target === portalBookmarkIcon) {
       const portalHeaderText = capitalize(document.querySelector(".header p").textContent.split(" ")[0]);
 
-      // if the word is already in the local storage we don't want to add it
-      // if (!isSaved(portalHeaderText, true)) {
-      //   addSavedLocal();
-      // };
-
       if (portalBookmarkIcon.innerText === "bookmark_added") {
         document.querySelector(".header p span").innerText = "bookmark";
         const indexOfWord = isSaved(portalHeaderText);
@@ -435,7 +429,7 @@ function displaySaved() {
   savedItems = JSON.parse(savedItems);
   savedItems.forEach(item => {
     addSaved(item.Word, getDate(item.Time));
-  })
+  });
 
   // Adds event listeners to those items 
   const savedWordsList = document.querySelectorAll(".saved-container .saved-expand ol li");
