@@ -143,6 +143,60 @@ function addRecentLocal(word) {
   }
 }
 
+// Adds "Saved" to local storage
+function addSavedLocal() {
+  const time = getTime();
+  const word = document.querySelector(".header p").textContent.split(" ")[0];
+  console.log(word);
+  if (!localStorage.getItem("Saved")) {
+    let items = [{Word: word, Time: time}];
+    items = JSON.stringify(items);
+    localStorage.setItem("Saved", items);
+  } else {
+    let savedLocalData = localStorage.getItem("Saved");
+    savedLocalData = JSON.parse(savedLocalData);
+    savedLocalData.push({Word: word, Time: time});
+    savedLocalData = JSON.stringify(savedLocalData);
+    localStorage.setItem("Saved", savedLocalData);
+  }
+}
+
+// Adds "Saved" to the DOM
+function addSaved(word, time = null) {
+  let FormartedDate;
+
+  if (time) {
+    FormartedDate = time;
+  } else {
+    FormartedDate = getDate();
+    // Adds the new word to local storage
+    addSavedLocal(word);
+  }
+  
+  const orderedList = document.querySelector(".saved-expand ol")
+  const savedWord = document.createElement("li");
+
+  // Adds an event listener to the new item only if it is created by invoking the search bar
+  if (!time) getNewItemReady(savedWord);
+
+  savedWord.innerHTML = `${word}`;
+  const dateHolder = document.createElement("p");
+  dateHolder.innerHTML = FormartedDate;
+
+  savedWord.appendChild(dateHolder);
+
+  // Checks to see if there is an `ol`
+  if (!orderedList) {
+    const newOrderedList = document.createElement("ol");
+    newOrderedList.prepend(savedWord);
+
+    document.querySelector(".saved-container .saved-expand")
+      .appendChild(newOrderedList);
+  } else {
+    orderedList.prepend(savedWord);
+  }
+}
+
 // Adds new words to the DOM
 function addRecent(word, time = null) {
   let FormartedDate;
@@ -244,7 +298,12 @@ function assembler(e, showWord = undefined) {
           const examples = document.createElement('li');
           examples.innerHTML = response.Examples;
           
-          document.querySelector(".header p").innerHTML = userInput;
+          if (isSaved(userInput, true)) {
+            document.querySelector(".header p").innerHTML = `${userInput} <span class="save-item material-symbols-outlined">bookmark_added</span>`;
+          } else {
+            document.querySelector(".header p").innerHTML = `${userInput} <span class="save-item material-symbols-outlined">bookmark</span>`;
+          }
+
           document.querySelectorAll(".player p")
             .forEach(p => p.style.display = "block");
           document.querySelector(".meaning").appendChild(definition);
@@ -292,12 +351,65 @@ function assembler(e, showWord = undefined) {
 
 showButton.addEventListener("keypress", assembler);
 
+function isSaved(word, bool=false) {
+  const localSavedItems = JSON.parse(localStorage.getItem("Saved"));
+  if (bool) {
+    if (!localSavedItems) return false;
+    const indexOfItem = localSavedItems.findIndex(item => item.Word === word);
+    return indexOfItem === -1 ? false : true;
+  } else {
+    if (!localSavedItems) return null;
+    // return localSavedItems.find(item => item.Word === word);
+    return localSavedItems.findIndex(item => item.Word === word);
+  }
+}
+
+function removeFromLocal(index, key) {
+  const localArray = JSON.parse(localStorage.getItem(key));
+  localArray.splice(index, 1);
+  localStorage.setItem(key, JSON.stringify(localArray));
+}
+
 // Closes the portal when the user clicks the header `p`
+// Or if the user clicks the bookmark icon, then that word will be saved
+// To the local storage and added to the DOM
 document.addEventListener("click", (e) => {
-  const word = document.querySelector(".header p");
+  const portalHeader = document.querySelector(".header p");
+  const portalBookmarkIcon = document.querySelector(".header p span");
+
   if (favDialog.open) {
-    if (e.target === word) {
+    if (e.target === portalHeader) {
       favDialog.close();
+    } else if (e.target === portalBookmarkIcon) {
+      const portalHeaderText = capitalize(document.querySelector(".header p").textContent.split(" ")[0]);
+
+      // if the word is already in the local storage we don't want to add it
+      // if (!isSaved(portalHeaderText, true)) {
+      //   addSavedLocal();
+      // };
+
+      if (portalBookmarkIcon.innerText === "bookmark_added") {
+        document.querySelector(".header p span").innerText = "bookmark";
+        const indexOfWord = isSaved(portalHeaderText);
+        const savedDOM = document.querySelector(".saved-expand ol");
+
+        if (indexOfWord === -1) {
+          return
+        } else {
+          // Remove the word from local storage
+          removeFromLocal(indexOfWord, "Saved");
+
+          // Remove the word from DOM
+          const removeWord = Array.from(document.querySelectorAll(".saved-expand ol li"))
+            .toReversed()[indexOfWord];
+          savedDOM.removeChild(removeWord);
+        }
+
+      } else {
+        document.querySelector(".header p span").innerText = "bookmark_added";
+        const newSavedWord = document.querySelector(".header p").textContent.split(" ")[0];
+        addSaved(newSavedWord);
+      }
     }
   }
 });
@@ -316,7 +428,22 @@ function displayRecent() {
   getItemsReady(recentWordsList);
 }
 
+// Gets the Saved words from local storage and add them to "Saved" window
+function displaySaved() {
+  let savedItems = localStorage.getItem("Saved");
+  if (!savedItems) return;
+  savedItems = JSON.parse(savedItems);
+  savedItems.forEach(item => {
+    addSaved(item.Word, getDate(item.Time));
+  })
+
+  // Adds event listeners to those items 
+  const savedWordsList = document.querySelectorAll(".saved-container .saved-expand ol li");
+  getItemsReady(savedWordsList);
+}
+
 document.addEventListener("DOMContentLoaded", displayRecent);
+document.addEventListener("DOMContentLoaded", displaySaved);
 
 // Adds event listeners to recent & saved items 
 function getItemsReady(itemLists) {
@@ -448,7 +575,12 @@ function updatePortal(pageIndex) {
   const examples = document.createElement("li");
   examples.innerHTML = response.Examples;
 
-  document.querySelector(".header p").innerHTML = userInput;
+  if (isSaved(userInput, true)) {
+    document.querySelector(".header p").innerHTML = `${userInput} <span class="save-item material-symbols-outlined">bookmark_added</span>`;
+  } else {
+    document.querySelector(".header p").innerHTML = `${userInput} <span class="save-item material-symbols-outlined">bookmark</span>`;
+  }
+
   document
     .querySelectorAll(".player p")
     .forEach((p) => (p.style.display = "block"));
@@ -479,7 +611,7 @@ function updatePortal(pageIndex) {
 }
 
 function addPages(howMany) {
-  // We don't want to start the count with `0`
+  // We don't want to start the count from `0`
   const howManyItems = howMany - 1;
   const pageContainer = document.querySelector("#portal .controls .pages");
   for (let index = 0; index <= howManyItems; index++) {

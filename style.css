@@ -266,6 +266,21 @@
   font-size: 25px;
   text-align: center;
   margin: 0 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#portal .portal-container .header p span {
+  margin: 0 3px;
+  padding: 2px;
+  user-select: none;
+}
+
+#portal .portal-container .header p span:hover {
+  cursor: pointer;
+  background-color: rgb(194, 194, 194);
+  border-radius: 40%;
 }
 
 #portal .portal-container .header {
