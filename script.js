@@ -172,7 +172,7 @@ function addSaved(word, time = null) {
     addSavedLocal(word);
   }
   
-  const orderedList = document.querySelector(".saved-expand ol")
+  const orderedList = document.querySelector(".saved-expand .list-container ol");
   const savedWord = document.createElement("li");
 
   // Adds an event listener to the new item only if it is created by invoking the search bar
@@ -189,7 +189,7 @@ function addSaved(word, time = null) {
     const newOrderedList = document.createElement("ol");
     newOrderedList.prepend(savedWord);
 
-    document.querySelector(".saved-container .saved-expand")
+    document.querySelector(".saved-container .saved-expand .list-container")
       .appendChild(newOrderedList);
   } else {
     orderedList.prepend(savedWord);
@@ -208,7 +208,7 @@ function addRecent(word, time = null) {
     addRecentLocal(word);
   }
   
-  const orderedList = document.querySelector(".recent-expand ol")
+  const orderedList = document.querySelector(".recent-expand .list-container ol");
   const recentWord = document.createElement("li");
 
   // Adds an event listener to the new item only if it is created by invoking the search bar
@@ -225,7 +225,7 @@ function addRecent(word, time = null) {
     const newOrderedList = document.createElement("ol");
     newOrderedList.prepend(recentWord);
 
-    document.querySelector(".recent-container .recent-expand")
+    document.querySelector(".recent-container .recent-expand .list-container")
       .appendChild(newOrderedList);
   } else {
     orderedList.prepend(recentWord);
